@@ -1,0 +1,19 @@
+{
+  "my" :{   
+      "User" : {
+      	"map" : "#map",
+    	"email" : "DeBug",
+		"password" : "DeBug"
+		}
+  },
+  "JsonView" : {
+  	"view" : "view"
+  },
+  "map" : {
+  	"abc":"#DeBug",
+  	"345":"asdf"
+	  
+  },
+  "DeBug" : ["good", "abc", "sdf"]
+  
+}

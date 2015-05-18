@@ -1,0 +1,18 @@
+{
+  "basePackage": "",
+  "mappings": [],
+  "characterEncoding": "UTF-8",
+  "url": "",
+  "jspPath": "",
+  "dateFormat": "yyyy-MM-dd HH:mm:ss",
+  "upload": {
+    "location": "uploads/",
+    "tempSaveLocation": "uploads/temp/",
+    //5MB = 1024*1024*5
+    "maxFileSize": 5242880,
+    //25MB = 1024*1024*5*5
+    "maxRequestSize": 26214400,
+    //1MB = 1024*1024
+    "fileSizeThreshold": 1048576
+  }
+}
