@@ -7,11 +7,12 @@ import java.lang.annotation.Target;
 
 /**
  * 
- * 컨트롤러를 클래스를 지정합니다.
+ * 지정된 메소드들을 먼저 실행합니다.<br>
+ * HttpMethod로 지정된 메소드를 실행가능합니다.
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Controller {
-
+@Target({ ElementType.TYPE, ElementType.METHOD })
+public @interface Before {
+	String[] value() default "";
 }

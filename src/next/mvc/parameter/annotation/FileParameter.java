@@ -1,4 +1,4 @@
-package next.mvc.annotation.parameters;
+package next.mvc.parameter.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
-public @interface Parameter {
+public @interface FileParameter {
 
 	public static final String PARAM_NULL = "필수 파라미터가 빠졌습니다.";
 

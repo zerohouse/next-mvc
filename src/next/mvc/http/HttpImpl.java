@@ -26,7 +26,7 @@ public class HttpImpl implements Http {
 
 	private HttpServletRequest req;
 	private HttpServletResponse resp;
-	private Map<String, String> uriVariables;
+	private Map<String, String> uriValues;
 
 	@Override
 	public String getParameter(String name) {
@@ -99,17 +99,17 @@ public class HttpImpl implements Http {
 	}
 
 	@Override
-	public void putUriVariable(String key, String uriVariable) {
-		if (uriVariables == null)
-			uriVariables = new HashMap<String, String>();
-		uriVariables.put(key, uriVariable);
+	public void putUriValue(String key, String uriVariable) {
+		if (uriValues == null)
+			uriValues = new HashMap<String, String>();
+		uriValues.put(key, uriVariable);
 	}
 
 	@Override
-	public String getUriVariable(String key) {
-		if (uriVariables == null)
+	public String getUriValue(String key) {
+		if (uriValues == null)
 			return null;
-		return uriVariables.get(key);
+		return uriValues.get(key);
 	}
 
 	@Override
@@ -192,10 +192,10 @@ public class HttpImpl implements Http {
 	}
 
 	@Override
-	public int getUriVariableSize() {
-		if (uriVariables == null)
+	public int getUriValueSize() {
+		if (uriValues == null)
 			return 0;
-		return uriVariables.size();
+		return uriValues.size();
 	}
 
 	@Override

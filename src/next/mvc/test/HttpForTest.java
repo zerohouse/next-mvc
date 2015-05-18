@@ -62,12 +62,12 @@ public class HttpForTest implements Http {
 	private Map<String, String> uriVariables = new HashMap<String, String>();
 
 	@Override
-	public void putUriVariable(String key, String uriVariable) {
+	public void putUriValue(String key, String uriVariable) {
 		uriVariables.put(key, uriVariable);
 	}
 
 	@Override
-	public String getUriVariable(String key) {
+	public String getUriValue(String key) {
 		return uriVariables.get(key);
 	}
 
@@ -174,7 +174,7 @@ public class HttpForTest implements Http {
 	}
 
 	@Override
-	public int getUriVariableSize() {
+	public int getUriValueSize() {
 		return uriVariables.size();
 	}
 

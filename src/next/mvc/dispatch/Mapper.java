@@ -1,20 +1,28 @@
 package next.mvc.dispatch;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import next.build.exception.TypeDuplicateException;
 import next.build.instance.InstancePool;
-import next.mvc.annotation.Controller;
+import next.mvc.annotation.After;
+import next.mvc.annotation.Before;
 import next.mvc.annotation.HttpMethod;
 import next.mvc.annotation.HttpMethods;
-import next.mvc.annotation.Mapping;
+import next.mvc.annotation.UriRouter;
+import next.mvc.annotation.When;
 import next.mvc.http.Http;
 import next.mvc.http.Store;
+import next.mvc.parameter.ParameterMaker;
+import next.mvc.parameter.annotation.ParameterInject;
+import next.mvc.parameter.inject.Inject;
 import next.mvc.response.Json;
+import next.mvc.response.Plain;
 import next.mvc.response.Response;
 import next.mvc.setting.Setting;
 
@@ -29,12 +37,21 @@ public class Mapper {
 	private UriMap uriMap;
 
 	private InstancePool instancePool;
+	private ParameterMaker parameterMaker;
 
 	Mapper() throws TypeDuplicateException {
 		instancePool = new InstancePool(Setting.getMapping().getBasePackage());
-		instancePool.addClassAnnotations(Controller.class, HttpMethods.class);
-		instancePool.addMethodAnnotations(Mapping.class, HttpMethod.class);
+		instancePool.addClassAnnotations(UriRouter.class, HttpMethods.class, ParameterInject.class);
+		instancePool.addMethodAnnotations(When.class, HttpMethod.class);
 		instancePool.build();
+
+		Set<Inject> set = new HashSet<Inject>();
+		instancePool.getAnnotatedInstance(ParameterInject.class).forEach(inject -> {
+			set.add((Inject) inject);
+		});
+
+		parameterMaker = new ParameterMaker(set);
+
 		methodMap = new HashMap<String, MethodWrapper>();
 		uriMap = new UriMap();
 		makeMethodMap();
@@ -54,23 +71,30 @@ public class Mapper {
 	}
 
 	private void makeUriMap() {
-		Setting.getReflections().getMethodsAnnotatedWith(Mapping.class).forEach(m -> {
+		Setting.getReflections().getMethodsAnnotatedWith(When.class).forEach(m -> {
 			Class<?> declaringClass = m.getDeclaringClass();
 			String[] prefix;
 			Queue<MethodWrapper> methodList = new ConcurrentLinkedQueue<MethodWrapper>();
 			String[] beforeClass = null;
 			String[] afterClass = null;
-			if (declaringClass.isAnnotationPresent(Mapping.class)) {
-				Mapping mapping = declaringClass.getAnnotation(Mapping.class);
+			if (declaringClass.isAnnotationPresent(When.class)) {
+				When mapping = declaringClass.getAnnotation(When.class);
 				prefix = mapping.value();
-				beforeClass = mapping.before();
-				afterClass = mapping.after();
 			} else {
 				prefix = new String[] { "" };
 			}
-			Mapping mapping = m.getAnnotation(Mapping.class);
-			String[] before = mapping.before();
-			String[] after = mapping.after();
+			if (declaringClass.isAnnotationPresent(Before.class))
+				beforeClass = declaringClass.getAnnotation(Before.class).value();
+			if (declaringClass.isAnnotationPresent(After.class))
+				afterClass = declaringClass.getAnnotation(After.class).value();
+			When mapping = m.getAnnotation(When.class);
+			String[] before = null;
+			String[] after = null;
+			if (m.isAnnotationPresent(Before.class))
+				before = declaringClass.getAnnotation(Before.class).value();
+			if (m.isAnnotationPresent(After.class))
+				after = declaringClass.getAnnotation(After.class).value();
+
 			addAll(methodList, beforeClass);
 			addAll(methodList, before);
 			methodList.add(new MethodWrapper(instancePool.getInstance(declaringClass), m));
@@ -129,7 +153,7 @@ public class Mapper {
 		try {
 			while (miter.hasNext()) {
 				MethodWrapper mw = miter.next();
-				Object returned = mw.execute(http, store);
+				Object returned = mw.execute(parameterMaker.getParamArray(http, mw.getMethod(), store));
 
 				if (returned == null)
 					continue;
@@ -146,7 +170,7 @@ public class Mapper {
 			}
 			new Json().render(http);
 		} catch (Exception e) {
-			new Json(true, e.getMessage(), null).render(http);
+			new Plain(e.getMessage()).render(http);
 		}
 	}
 

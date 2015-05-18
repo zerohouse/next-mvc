@@ -44,10 +44,10 @@ public class PatternAndKeys {
 		while (matcher.find()) {
 			Iterator<String> key = keys.iterator();
 			for (int j = 1; j < matcher.groupCount() + 1; j++) {
-				http.putUriVariable(key.next(), matcher.group(j));
+				http.putUriValue(key.next(), matcher.group(j));
 			}
 		}
-		return http.getUriVariableSize() != 0;
+		return http.getUriValueSize() != 0;
 	}
 
 }

@@ -2,7 +2,7 @@ package next.mvc.setting;
 
 public class Mapping {
 	private String basePackage = "";
-	private Mapping mappings;
+	private Object mappings;
 	private String characterEncoding = "UTF-8";
 	private String dateFormat = "yyyy-MM-dd HH:mm:ss";
 	private String url;

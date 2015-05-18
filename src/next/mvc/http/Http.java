@@ -20,9 +20,9 @@ public interface Http {
 
 	void write(String string);
 
-	void putUriVariable(String key, String uriVariable);
+	void putUriValue(String key, String uriVariable);
 
-	String getUriVariable(String key);
+	String getUriValue(String key);
 
 	void setCharacterEncoding(String encording);
 
@@ -50,7 +50,7 @@ public interface Http {
 
 	HttpServletResponse getResp();
 
-	int getUriVariableSize();
+	int getUriValueSize();
 
 	Part getPart(String name);
 

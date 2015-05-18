@@ -1,4 +1,4 @@
-package next.mvc.upload;
+package next.mvc.parameter;
 
 import java.io.IOException;
 import java.io.InputStream;

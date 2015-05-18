@@ -22,6 +22,7 @@ public class Setting {
 			mapping = new Gson().fromJson(new FileReader(Setting.class.getResource("/next-mvc.json").getFile()), Mapping.class);
 		} catch (Exception e) {
 			mapping = new Mapping();
+			e.printStackTrace();
 		}
 		gson = new GsonBuilder().setDateFormat(mapping.getDateFormat()).create();
 		reflections = new Reflections(mapping.getBasePackage(), new SubTypesScanner(), new TypeAnnotationsScanner(), new FieldAnnotationsScanner(),
