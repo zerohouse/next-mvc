@@ -27,7 +27,7 @@ public class Next implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext sc = sce.getServletContext();
 		Object mappings = Setting.getMapping().getMappings();
-		ServletRegistration.Dynamic dispatcher = sc.addServlet("Dispatcher", "next.mapping.dispatch.Dispatcher");
+		ServletRegistration.Dynamic dispatcher = sc.addServlet("Dispatcher", "next.mvc.dispatch.Dispatcher");
 		ServletRegistration defaultDispatcher = sc.getServletRegistration("default");
 		dispatcher.setLoadOnStartup(1);
 
