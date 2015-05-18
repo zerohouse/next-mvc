@@ -172,7 +172,7 @@ HttpSevlet req와 resp의 Wrapper 클래스, 익셉션제거
     	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
     	version="3.0">
     	<listener>
-    		<listener-class>next.Next</listener-class>
+    		<listener-class>next.mvc.Next</listener-class>
     	</listener>
     </web-app>
 
